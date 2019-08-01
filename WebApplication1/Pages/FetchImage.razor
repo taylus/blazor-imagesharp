@@ -1,0 +1,15 @@
+﻿@page "/fetchimage"
+
+<h1>Fetch image</h1>
+
+<p>This component demonstrates generating and displaying a base64 encoded image using <a href="https://github.com/SixLabors/ImageSharp">ImageSharp</a>.</p>
+
+<img src="@GetImageData()" class="pixelated" style="width:64px" alt="Fetched image" />
+
+@code {
+    string GetImageData()
+    {
+        //return "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+        return "data:image/png;base64, " + new ImageGenerator().GenerateBase64();
+    }
+}
