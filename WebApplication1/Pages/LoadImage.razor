@@ -1,5 +1,6 @@
 ﻿@page "/loadimage"
 @inject IJSRuntime JsRuntime
+@inject ImageGrayscaler ImageGrayscaler
 
 <h1>Load image from a file input</h1>
 
@@ -9,6 +10,9 @@
 
 <p><input type="file" accept=".png,.jpg,.jpeg,.gif"></p>
 
+<img id="before" alt="Before">
+<img id="after" alt="After">
+
 @code {
     //Blazor version of "on document ready" so JS on the page doesn't run until the file input is rendered and ready
     //idea from here: https://github.com/aspnet/Blazor/issues/1084
@@ -16,19 +20,19 @@
     protected override async Task OnAfterRenderAsync()
     {
         //call some JS which sets up the file input with a change handler
-        //which gets the selected file's content in a base64-encoded string
-        //and passes that to a C# method for further processing
-        await JsRuntime.InvokeAsync<string>("onBlazorReady");
+        //which reads the selected file's content into a base64-encoded string
+        //and passes that to ProcessImage below for further processing
+        await JsRuntime.InvokeAsync<string>("onBlazorReady", DotNetObjectRef.Create(this));
     }
 
     //JS in load-image.js will call this when a file is selected in the file input
     [JSInvokable]
-    public static string ProcessImage(string base64ImageData)
+    public string ProcessImage(string base64ImageData)
     {
         //TODO: put file size restrictions on the JS side
         //images bigger than around 500KB or so take too long to make it across the interop boundary and make the browser unresponsive
         
         //Console.WriteLine("Image data received in .NET: " + base64ImageData);
-        return "foo"; //TODO: return base64 image data for the processed image
+        return ImageGrayscaler.Grayscale(base64ImageData);
     }
 }

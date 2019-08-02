@@ -7,6 +7,9 @@ namespace WebApplication1
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ImageGenerator>();
+            services.AddTransient<ImageGrayscaler>();
+            services.AddTransient<Base64ImageTranslator>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)

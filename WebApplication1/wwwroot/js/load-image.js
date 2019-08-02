@@ -1,6 +1,5 @@
 /* jshint esnext:true, browser:true, devel: true */
-/* globals DotNet */
-window.onBlazorReady = function() {
+window.onBlazorReady = function(dotNetObjectRef) {
   "use strict";
   var input = document.querySelector("input[type=file]");
   if (!input) return;
@@ -9,8 +8,9 @@ window.onBlazorReady = function() {
     var file = input.files[0];
     getBase64FileData(file).then(function(base64FileData) {
       //console.log("JS: Image data loaded, sending to .NET via interop: " + base64FileData);
-      DotNet.invokeMethodAsync("WebApplication1", "ProcessImage", base64FileData).then(function(base64Output) {
+      dotNetObjectRef.invokeMethodAsync("ProcessImage", base64FileData).then(function(base64Output) {
         console.log("JS: Got data back from .NET via interop: " + base64Output);
+        showBeforeAndAfter(base64FileData, base64Output);
       });
     });
   }, false);
@@ -25,5 +25,13 @@ window.onBlazorReady = function() {
       }, false);
       reader.readAsDataURL(file);
     });
+  }
+
+  function showBeforeAndAfter(beforeData, afterData) {
+    var beforeImg = document.querySelector("img#before");
+    if (beforeImg) beforeImg.src = "data:image/png;base64, " + beforeData;
+
+    var afterImg = document.querySelector("img#after");
+    if (afterImg) afterImg.src = "data:image/png;base64, " + afterData;
   }
 };
