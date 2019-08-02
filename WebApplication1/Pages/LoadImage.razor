@@ -1,0 +1,34 @@
+﻿@page "/loadimage"
+@inject IJSRuntime JsRuntime
+
+<h1>Load image from a file input</h1>
+
+<p>This component demonstrates loading and processing an image in Blazor.</p>
+
+<p>Sort of like <a href="https://codepen.io/taylus/pen/NQvpaJ">this example</a>, but here the processing is done in the C# side of Blazor so I can use <a href="https://github.com/SixLabors/ImageSharp">ImageSharp</a> on the image data.</p>
+
+<p><input type="file" accept=".png,.jpg,.jpeg,.gif"></p>
+
+@code {
+    //Blazor version of "on document ready" so JS on the page doesn't run until the file input is rendered and ready
+    //idea from here: https://github.com/aspnet/Blazor/issues/1084
+    //but it got outdated and had to be adapted per docs here: https://docs.microsoft.com/en-us/aspnet/core/blazor/javascript-interop
+    protected override async Task OnAfterRenderAsync()
+    {
+        //call some JS which sets up the file input with a change handler
+        //which gets the selected file's content in a base64-encoded string
+        //and passes that to a C# method for further processing
+        await JsRuntime.InvokeAsync<string>("onBlazorReady");
+    }
+
+    //JS in load-image.js will call this when a file is selected in the file input
+    [JSInvokable]
+    public static string ProcessImage(string base64ImageData)
+    {
+        //TODO: put file size restrictions on the JS side
+        //images bigger than around 500KB or so take too long to make it across the interop boundary and make the browser unresponsive
+        
+        //Console.WriteLine("Image data received in .NET: " + base64ImageData);
+        return "foo"; //TODO: return base64 image data for the processed image
+    }
+}
