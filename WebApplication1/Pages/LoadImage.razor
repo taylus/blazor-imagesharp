@@ -6,12 +6,14 @@
 
 <p>This component demonstrates loading and processing an image in Blazor.</p>
 
-<p>Sort of like <a href="https://codepen.io/taylus/pen/NQvpaJ">this example</a>, but here the processing is done in the C# side of Blazor so I can use <a href="https://github.com/SixLabors/ImageSharp">ImageSharp</a> on the image data.</p>
+<p>Select an image from your computer and it will be grayscaled and displayed below, side-by-side with the original.</p>
+
+<p>The image never leaves your computer -- this all happens in your browser -- but select a small image (under 100 KB) for performance reasons.</p>
 
 <p><input type="file" accept=".png,.jpg,.jpeg,.gif"></p>
 
-<img id="before" alt="Before">
-<img id="after" alt="After">
+<img id="before" alt="Before" style="display: none">
+<img id="after" alt="After" style="display: none">
 
 @code {
     //Blazor version of "on document ready" so JS on the page doesn't run until the file input is rendered and ready

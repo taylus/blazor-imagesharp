@@ -9,7 +9,7 @@ window.onBlazorReady = function(dotNetObjectRef) {
     getBase64FileData(file).then(function(base64FileData) {
       //console.log("JS: Image data loaded, sending to .NET via interop: " + base64FileData);
       dotNetObjectRef.invokeMethodAsync("ProcessImage", base64FileData).then(function(base64Output) {
-        console.log("JS: Got data back from .NET via interop: " + base64Output);
+        //console.log("JS: Got data back from .NET via interop: " + base64Output);
         showBeforeAndAfter(base64FileData, base64Output);
       });
     });
@@ -29,9 +29,15 @@ window.onBlazorReady = function(dotNetObjectRef) {
 
   function showBeforeAndAfter(beforeData, afterData) {
     var beforeImg = document.querySelector("img#before");
-    if (beforeImg) beforeImg.src = "data:image/png;base64, " + beforeData;
+    if (beforeImg) {
+      beforeImg.style.display = "inline";
+      beforeImg.src = "data:image/png;base64, " + beforeData;
+    }
 
     var afterImg = document.querySelector("img#after");
-    if (afterImg) afterImg.src = "data:image/png;base64, " + afterData;
+    if (afterImg) {
+      afterImg.style.display = "inline";
+      afterImg.src = "data:image/png;base64, " + afterData;
+    }
   }
 };
